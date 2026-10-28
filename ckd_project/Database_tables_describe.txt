@@ -1,0 +1,164 @@
+mysql> use ckd_project;
+Database changed
+mysql> show tables;
++-----------------------+
+| Tables_in_ckd_project |
++-----------------------+
+| knowledge_resources   |
+| lab_results           |
+| notifications         |
+| patients              |
+| progression_labels    |
+| user_profile_settings |
+| users                 |
+| visits                |
++-----------------------+
+8 rows in set (0.01 sec)
+
+mysql> describe knowledge_resources;
++-------------------+--------------------------------------------------+------+-----+-------------------+-------------------+
+| Field             | Type                                             | Null | Key | Default           | Extra             |
++-------------------+--------------------------------------------------+------+-----+-------------------+-------------------+
+| resource_id       | bigint unsigned                                  | NO   | PRI | NULL              | auto_increment    |
+| title             | varchar(255)                                     | NO   |     | NULL              |                   |
+| category          | varchar(80)                                      | NO   | MUL | NULL              |                   |
+| source_name       | varchar(255)                                     | YES  |     | NULL              |                   |
+| source_url        | varchar(1000)                                    | YES  |     | NULL              |                   |
+| version_label     | varchar(100)                                     | YES  |     | NULL              |                   |
+| original_filename | varchar(255)                                     | NO   |     | NULL              |                   |
+| stored_filename   | varchar(255)                                     | NO   | UNI | NULL              |                   |
+| mime_type         | varchar(100)                                     | NO   |     | NULL              |                   |
+| file_size_bytes   | bigint unsigned                                  | NO   |     | NULL              |                   |
+| uploaded_by       | bigint unsigned                                  | NO   | MUL | NULL              |                   |
+| status            | enum('UPLOADED','PROCESSING','INDEXED','FAILED') | NO   |     | UPLOADED          |                   |
+| created_at        | timestamp                                        | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-------------------+--------------------------------------------------+------+-----+-------------------+-------------------+
+13 rows in set (0.00 sec)
+
+mysql> describe lab_results;
++---------------------+-----------------+------+-----+---------+----------------+
+| Field               | Type            | Null | Key | Default | Extra          |
++---------------------+-----------------+------+-----+---------+----------------+
+| lab_result_id       | bigint unsigned | NO   | PRI | NULL    | auto_increment |
+| visit_id            | bigint unsigned | NO   | MUL | NULL    |                |
+| creatinine_mg_dl    | decimal(7,3)    | YES  |     | NULL    |                |
+| egfr_ml_min_1_73m2  | decimal(7,2)    | YES  |     | NULL    |                |
+| acr_mg_g            | decimal(10,2)   | YES  |     | NULL    |                |
+| sbp_mmhg            | decimal(6,2)    | YES  |     | NULL    |                |
+| dbp_mmhg            | decimal(6,2)    | YES  |     | NULL    |                |
+| hemoglobin_g_dl     | decimal(6,2)    | YES  |     | NULL    |                |
+| hba1c_percent       | decimal(5,2)    | YES  |     | NULL    |                |
+| glucose_mg_dl       | decimal(7,2)    | YES  |     | NULL    |                |
+| cholesterol_mg_dl   | decimal(7,2)    | YES  |     | NULL    |                |
+| triglycerides_mg_dl | decimal(7,2)    | YES  |     | NULL    |                |
+| ldl_mg_dl           | decimal(7,2)    | YES  |     | NULL    |                |
+| hdl_mg_dl           | decimal(7,2)    | YES  |     | NULL    |                |
+| potassium_mmol_l    | decimal(6,2)    | YES  |     | NULL    |                |
+| sodium_mmol_l       | decimal(6,2)    | YES  |     | NULL    |                |
+| albumin_g_dl        | decimal(6,2)    | YES  |     | NULL    |                |
+| data_source         | varchar(20)     | NO   |     | REAL    |                |
++---------------------+-----------------+------+-----+---------+----------------+
+18 rows in set (0.00 sec)
+
+mysql> describe notification;
+ERROR 1146 (42S02): Table 'ckd_project.notification' doesn't exist
+mysql> describe notifications
+    -> ;
++-------------------+-----------------+------+-----+-------------------+-------------------+
+| Field             | Type            | Null | Key | Default           | Extra             |
++-------------------+-----------------+------+-----+-------------------+-------------------+
+| notification_id   | bigint unsigned | NO   | PRI | NULL              | auto_increment    |
+| user_id           | bigint unsigned | NO   | MUL | NULL              |                   |
+| patient_id        | varchar(20)     | YES  | MUL | NULL              |                   |
+| title             | varchar(180)    | NO   |     | NULL              |                   |
+| message           | varchar(1000)   | NO   |     | NULL              |                   |
+| notification_type | varchar(50)     | NO   |     | SYSTEM            |                   |
+| is_read           | tinyint(1)      | NO   |     | 0                 |                   |
+| created_at        | timestamp       | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-------------------+-----------------+------+-----+-------------------+-------------------+
+8 rows in set (0.00 sec)
+
+mysql> describe patients;
++----------------------+--------------+------+-----+-------------------+-------------------+
+| Field                | Type         | Null | Key | Default           | Extra             |
++----------------------+--------------+------+-----+-------------------+-------------------+
+| patient_id           | varchar(20)  | NO   | PRI | NULL              |                   |
+| source_code          | varchar(10)  | NO   | MUL | NULL              |                   |
+| source_patient_id    | varchar(100) | NO   |     | NULL              |                   |
+| age_at_baseline      | decimal(5,2) | YES  |     | NULL              |                   |
+| gender               | tinyint      | YES  |     | NULL              |                   |
+| ihd                  | tinyint(1)   | YES  |     | NULL              |                   |
+| cvd                  | tinyint(1)   | YES  |     | NULL              |                   |
+| hypertension         | tinyint(1)   | YES  |     | NULL              |                   |
+| diabetes             | tinyint(1)   | YES  |     | NULL              |                   |
+| dyslipidemia         | tinyint(1)   | YES  |     | NULL              |                   |
+| baseline_sbp         | decimal(6,2) | YES  |     | NULL              |                   |
+| baseline_dbp         | decimal(6,2) | YES  |     | NULL              |                   |
+| baseline_bmi         | decimal(6,2) | YES  |     | NULL              |                   |
+| baseline_egfr        | decimal(7,2) | YES  |     | NULL              |                   |
+| baseline_hb          | decimal(6,2) | YES  |     | NULL              |                   |
+| baseline_chol        | decimal(7,2) | YES  |     | NULL              |                   |
+| baseline_tg          | decimal(7,2) | YES  |     | NULL              |                   |
+| baseline_ldl         | decimal(7,2) | YES  |     | NULL              |                   |
+| baseline_hdl         | decimal(7,2) | YES  |     | NULL              |                   |
+| baseline_albuminuria | tinyint      | YES  |     | NULL              |                   |
+| raasi                | tinyint(1)   | YES  |     | NULL              |                   |
+| glp1ra               | tinyint(1)   | YES  |     | NULL              |                   |
+| sglt2i               | tinyint(1)   | YES  |     | NULL              |                   |
+| statin               | tinyint(1)   | YES  |     | NULL              |                   |
+| created_at           | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| full_name            | varchar(150) | YES  |     | NULL              |                   |
++----------------------+--------------+------+-----+-------------------+-------------------+
+26 rows in set (0.00 sec)
+
+mysql> describe progression_labels;
++---------------------+-----------------+------+-----+---------+----------------+
+| Field               | Type            | Null | Key | Default | Extra          |
++---------------------+-----------------+------+-----+---------+----------------+
+| progression_id      | bigint unsigned | NO   | PRI | NULL    | auto_increment |
+| patient_id          | varchar(20)     | NO   | UNI | NULL    |                |
+| published_egfr_rate | decimal(7,3)    | YES  |     | NULL    |                |
+| egfr_slope_ours     | decimal(7,3)    | YES  |     | NULL    |                |
+| rapid_progression   | tinyint(1)      | NO   |     | NULL    |                |
+| target_defination   | varchar(255)    | NO   |     | NULL    |                |
++---------------------+-----------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> describe user_profile_settings;
++----------+-----------------+------+-----+---------+-------+
+| Field    | Type            | Null | Key | Default | Extra |
++----------+-----------------+------+-----+---------+-------+
+| user_id  | bigint unsigned | NO   | PRI | NULL    |       |
+| hospital | varchar(255)    | YES  |     | NULL    |       |
++----------+-----------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> describe users;
++----------------+---------------------------------------------------+------+-----+-------------------+-------------------+
+| Field          | Type                                              | Null | Key | Default           | Extra             |
++----------------+---------------------------------------------------+------+-----+-------------------+-------------------+
+| user_id        | bigint unsigned                                   | NO   | PRI | NULL              | auto_increment    |
+| username       | varchar(100)                                      | NO   | UNI | NULL              |                   |
+| email          | varchar(255)                                      | NO   | UNI | NULL              |                   |
+| password_hash  | varchar(255)                                      | NO   |     | NULL              |                   |
+| role           | enum('ADMIN','DOCTOR','DEO')                      | NO   |     | DOCTOR            |                   |
+| created_at     | timestamp                                         | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| full_name      | varchar(150)                                      | YES  |     | NULL              |                   |
+| account_status | enum('PENDING','APPROVED','REJECTED','SUSPENDED') | NO   |     | PENDING           |                   |
+| approved_by    | bigint unsigned                                   | YES  | MUL | NULL              |                   |
+| approved_at    | datetime                                          | YES  |     | NULL              |                   |
++----------------+---------------------------------------------------+------+-----+-------------------+-------------------+
+10 rows in set (0.00 sec)
+
+mysql> describe visits;
++-------------------+-----------------+------+-----+---------+----------------+
+| Field             | Type            | Null | Key | Default | Extra          |
++-------------------+-----------------+------+-----+---------+----------------+
+| visit_id          | bigint unsigned | NO   | PRI | NULL    | auto_increment |
+| patient_id        | varchar(20)     | NO   | MUL | NULL    |                |
+| visit_number      | int             | NO   |     | NULL    |                |
+| day_from_baseline | int             | NO   |     | NULL    |                |
+| visit_date        | date            | YES  |     | NULL    |                |
+| encounter_type    | varchar(50)     | YES  |     | NULL    |                |
++-------------------+-----------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
