@@ -170,3 +170,6 @@ htmlcov/
 
 # Downloaded embedding model cache
 /ckd_project/models/embedding_cache/
+.env
+.env.*
+!.env.example

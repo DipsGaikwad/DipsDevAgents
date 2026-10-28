@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     RAG_MODEL_CACHE: str = 'models/embedding_cache'
     RAG_EMBEDDING_MODEL: str = 'sentence-transformers/all-MiniLM-L6-v2'
     RAG_MIN_RELEVANCE: float = 0.20
+    GEMINI_API_KEY: str = ""
+    RAG_LLM_MODEL: str = "gemini-3.8-flash"
     #Password Recovery Setting
         # Password recovery / SMTP
     SMTP_HOST: str = ''
